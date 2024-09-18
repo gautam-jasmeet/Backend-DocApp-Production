@@ -1,0 +1,51 @@
+:root{
+  --primary-color: #a20000;
+  --secondary-color: rgba(248,249,250,1);
+  --light-color: #f8f9fa;
+  --success-color: #198754;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #0dcaf0;
+  --dark-color: #000;
+  --main-header-color:#a20000;
+  --main-Dept-header-color:rgba(248,249,250,1);
+  
+}
+
+
+.card_btn{
+  /* width: 100%; */
+  background-color: var(--primary-color);
+  color: var(--light-color);
+  border: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: 0.3s ease-in-out;
+  margin: 0.5rem;
+  /* margin-left: 4rem; */
+  border-radius: 10px;
+}
+
+
+
+/* .App {
+  text-align: center;
+} */
+
+
+
+
+/* .App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+} */
+
+
+
+
