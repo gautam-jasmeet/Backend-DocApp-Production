@@ -4,6 +4,7 @@ import cors from 'cors';
 import colors from 'colors';
 import authRoutes from './routes/authRoutes.js';
 import documentRoutes from './routes/documentRoutes.js';
+import joiningRoutes from './routes/joiningRoutes.js';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/auth', authRoutes);
 app.use('/documents', documentRoutes);
 app.use('/uploads', express.static('uploads'));
+app.use('/joining', joiningRoutes); // Use joining routes
 
 //rest api
 app.get("/", (req, res) => {

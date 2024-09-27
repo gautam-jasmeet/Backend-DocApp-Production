@@ -1,5 +1,5 @@
-import mysql from 'mysql2';
-import dotenv from 'dotenv';
+import mysql from "mysql2";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -12,9 +12,9 @@ const db = mysql.createConnection({
 
 db.connect((err) => {
   if (err) {
-    console.error('Error connecting to MySQL:', err.message);
+    console.error("Error connecting to MySQL:", err.message);
   } else {
-    console.log('Connected to MySQL database'.bgMagenta.white);
+    console.log("Connected to MySQL database".bgMagenta.white);
   }
 });
 
