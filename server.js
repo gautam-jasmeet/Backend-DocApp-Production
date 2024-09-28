@@ -2,7 +2,6 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import colors from 'colors';
-import db from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import documentRoutes from './routes/documentRoutes.js';
 import joiningRoutes from './routes/joiningRoutes.js';
@@ -32,4 +31,4 @@ app.listen(PORT, () => {
 
 
 
-//rjkrhuithuitwehtuiht
+//comments
