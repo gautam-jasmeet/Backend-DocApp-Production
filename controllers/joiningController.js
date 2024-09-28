@@ -190,6 +190,7 @@ export const fillJoiningForm = async (req, res) => {
       e_relation2,
       e_address2,
       e_contact_no2,
+      date
     } = req.body;
 
     const photo_url = req.file
@@ -207,8 +208,8 @@ export const fillJoiningForm = async (req, res) => {
         permanent_address_district_city, permanent_address_pin_code, date_of_interview,
         date_of_joining, department, designation, employee_type, mode_of_recruitment,
         reference_consultancy, pan_no, bank, account_no, ifsc_code, branch_address, uan_no,
-        e_name1, e_relation1, e_address1, e_contact_no1, e_name2, e_relation2, e_address2, e_contact_no2
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)`;
+        e_name1, e_relation1, e_address1, e_contact_no1, e_name2, e_relation2, e_address2, e_contact_no2, date
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?)`;
 
     const values = [
       photo_url,
@@ -257,6 +258,7 @@ export const fillJoiningForm = async (req, res) => {
       e_relation2 || null,
       e_address2 || null,
       e_contact_no2 || null,
+      date || null
     ];
 
     // Ensure values length matches query placeholders count
