@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import colors from 'colors';
+import db from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import documentRoutes from './routes/documentRoutes.js';
 import joiningRoutes from './routes/joiningRoutes.js';
@@ -28,3 +29,7 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`.bgCyan.white);
 });
+
+
+
+//rjkrhuithuitwehtuiht
