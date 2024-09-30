@@ -4,7 +4,7 @@ import {
   getAllDocuments,
   getDocumentsByDepartment,
   deleteDocument,
-  updateDocument,
+  updateDocumentStatus,
 } from "../controllers/documentController.js";
 import { authenticateToken, checkRole } from "../middleware/authMiddleware.js";
 import upload from "../middleware/uploadMiddleware.js";
@@ -43,8 +43,8 @@ router.delete(
 router.put(
   "/:id",
   authenticateToken,
-  checkRole(["Admin", "Supervisor"]),
-  updateDocument
+  checkRole(["Admin"]),
+  updateDocumentStatus
 );
 
 export default router;

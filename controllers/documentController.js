@@ -310,7 +310,7 @@ export const deleteDocument = async (req, res) => {
 };
 
 // Update Document by ID (Admin, Supervisor)
-export const updateDocument = async (req, res) => {
+export const updateDocumentStatus = async (req, res) => {
   const { status } = req.body;
   const query = "UPDATE documents SET status = ? WHERE id = ?";
 
