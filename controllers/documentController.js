@@ -263,9 +263,9 @@ const insertDocument = async (
       req.user.designation,
       req.user.shift,
     ]);
-    res.json({ message: "File uploaded successfully", fileUrl });
+    res.status(200).json({ message: "File uploaded successfully", fileUrl });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
 };
 
@@ -287,22 +287,22 @@ export const getDocumentsByDepartment = async (req, res) => {
 
   try {
     const result = await queryDb(query, [req.user.department]);
-    res.json(result);
+    res.status(200).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Delete Documents By (Admin, Supervisor)
+// Delete Documents By ID (Admin, Supervisor)
 export const deleteDocument = async (req, res) => {
   const query = "DELETE FROM documents WHERE id = ?";
 
   try {
     const result = await queryDb(query, [req.params.id]);
     if (result.affectedRows > 0) {
-      res.json({ message: "Document deleted successfully" });
+      res.status(200).json({ message: "Document deleted successfully" });
     } else {
-      res.status(404).json({ message: "Document not found" });
+      res.status(400).json({ message: "Document not found" });
     }
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -317,9 +317,9 @@ export const updateDocument = async (req, res) => {
   try {
     const result = await queryDb(query, [status, req.params.id]);
     if (result.affectedRows > 0) {
-      res.json({ message: "Document status updated successfully" });
+      res.status(200).json({ message: "Document status updated successfully" });
     } else {
-      res.status(404).json({ message: "Document not found" });
+      res.status(400).json({ message: "Document not found" });
     }
   } catch (err) {
     res.status(500).json({ error: err.message });

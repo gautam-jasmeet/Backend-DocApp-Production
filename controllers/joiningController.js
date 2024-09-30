@@ -190,7 +190,7 @@ export const fillJoiningForm = async (req, res) => {
       e_relation2,
       e_address2,
       e_contact_no2,
-      date
+      date,
     } = req.body;
 
     const photo_url = req.file
@@ -258,7 +258,7 @@ export const fillJoiningForm = async (req, res) => {
       e_relation2 || null,
       e_address2 || null,
       e_contact_no2 || null,
-      date || null
+      date || null,
     ];
 
     // Ensure values length matches query placeholders count
@@ -268,10 +268,10 @@ export const fillJoiningForm = async (req, res) => {
         error: `Expected ${placeholderCount} values, but got ${values.length}.`,
       });
     }
-
     await db.promise().query(query, values);
-
-    res.json({ message: "Joining form submitted successfully", photo_url });
+    return res
+      .status(200)
+      .json({ message: "Joining form submitted successfully", photo_url });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -282,7 +282,7 @@ export const getJoiningForms = async (req, res) => {
   try {
     const query = "SELECT * FROM joining_forms";
     const [result] = await db.promise().query(query);
-    res.json(result);
+    res.status(200).json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
