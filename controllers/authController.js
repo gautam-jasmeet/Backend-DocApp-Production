@@ -79,13 +79,13 @@ export const signup = async (req, res) => {
       [name, employeeID, department, designation, hashedPassword, shift],
       (err) => {
         if (err) {
-          return res.status(400).json({ error: err.message });
+          return res.status(500).json({ error: err.message }); // Internal server error for database issues
         }
-        return res.status(200).json({ message: "User created successfully" });
+        return res.status(201).json({ message: "User created successfully" }); //201 for resource creation
       }
     );
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message }); // Internal server Error for other errors
   }
 };
 
@@ -105,7 +105,7 @@ export const login = async (req, res) => {
     });
 
     if (result.length === 0) {
-      return res.status(400).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" }); //404 for user not found
     }
 
     const user = result[0];
@@ -114,7 +114,7 @@ export const login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid credentials" }); //401 for unauthorized access
     }
 
     // Generate JWT token
@@ -133,6 +133,6 @@ export const login = async (req, res) => {
       shift: user.shift, // User's shift
     });
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message }); //Internal server Error for unexpected issues
   }
 };

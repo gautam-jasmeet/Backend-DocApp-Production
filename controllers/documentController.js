@@ -178,7 +178,7 @@ export const uploadDocument = async (req, res) => {
   } = req.body;
 
   if (!file) {
-    return res.status(400).json({ error: "No file uploaded" });
+    return res.status(422).json({ error: "No file uploaded" }); //Unprocessable Entity
   }
 
   try {
@@ -187,7 +187,7 @@ export const uploadDocument = async (req, res) => {
       if (!department) {
         return res
           .status(400)
-          .json({ error: "Admin must specify a department" });
+          .json({ error: "Admin must specify a department" }); // Bad Request
       }
 
       // Query to check if the department exists in the 'users' table
@@ -196,7 +196,7 @@ export const uploadDocument = async (req, res) => {
       const result = await queryDb(checkDepartmentQuery, [department]);
 
       if (result.length === 0) {
-        return res.status(400).json({ error: "Invalid department selected" });
+        return res.status(404).json({ error: "Invalid department selected" }); //Not Found
       }
 
       // If department exists, proceed with uploading the document
@@ -229,7 +229,7 @@ export const uploadDocument = async (req, res) => {
       );
     }
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message }); //Internal Server Error
   }
 };
 
@@ -263,9 +263,9 @@ const insertDocument = async (
       req.user.designation,
       req.user.shift,
     ]);
-    res.status(200).json({ message: "File uploaded successfully", fileUrl });
+    res.status(201).json({ message: "File uploaded successfully", fileUrl }); //Created
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message }); //Internal Server Error
   }
 };
 
@@ -275,9 +275,9 @@ export const getAllDocuments = async (req, res) => {
 
   try {
     const result = await queryDb(query);
-    res.json(result);
+    res.status(200).json(result); // OK
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message }); // Internal Server Error
   }
 };
 
@@ -287,9 +287,14 @@ export const getDocumentsByDepartment = async (req, res) => {
 
   try {
     const result = await queryDb(query, [req.user.department]);
-    res.status(200).json(result);
+    if (result.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No documents found for this department" }); //Not Found
+    }
+    res.status(200).json(result); // OK
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message }); //Internal Server Error
   }
 };
 
@@ -300,12 +305,12 @@ export const deleteDocument = async (req, res) => {
   try {
     const result = await queryDb(query, [req.params.id]);
     if (result.affectedRows > 0) {
-      res.status(200).json({ message: "Document deleted successfully" });
+      res.status(200).json({ message: "Document deleted successfully" }); //OK
     } else {
-      res.status(400).json({ message: "Document not found" });
+      res.status(404).json({ message: "Document not found" }); //Not Found
     }
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message }); //Internal Server Error
   }
 };
 
@@ -317,11 +322,11 @@ export const updateDocumentStatus = async (req, res) => {
   try {
     const result = await queryDb(query, [status, req.params.id]);
     if (result.affectedRows > 0) {
-      res.status(200).json({ message: "Document status updated successfully" });
+      res.status(200).json({ message: "Document status updated successfully" }); //OK
     } else {
-      res.status(400).json({ message: "Document not found" });
+      res.status(404).json({ message: "Document not found" }); //Not Found
     }
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message }); //Internal Server Error
   }
 };

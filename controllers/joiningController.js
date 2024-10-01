@@ -270,10 +270,10 @@ export const fillJoiningForm = async (req, res) => {
     }
     await db.promise().query(query, values);
     return res
-      .status(200)
+      .status(201) //201 for resource created
       .json({ message: "Joining form submitted successfully", photo_url });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message }); //500 for server error
   }
 };
 
@@ -282,8 +282,11 @@ export const getJoiningForms = async (req, res) => {
   try {
     const query = "SELECT * FROM joining_forms";
     const [result] = await db.promise().query(query);
-    res.status(200).json(result);
+    if (result.length === 0) {
+      return res.status(404).json({ message: "No joining forms found" }); //404 for not found
+    }
+    res.status(200).json(result); //200 for success
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message }); //500 for server error
   }
 };
