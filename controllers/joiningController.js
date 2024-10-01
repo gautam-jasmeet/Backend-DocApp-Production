@@ -171,12 +171,14 @@ export const fillJoiningForm = async (req, res) => {
       permanent_address_pin_code,
       date_of_interview,
       date_of_joining,
+      company_name,
       department,
       designation,
       employee_type,
       mode_of_recruitment,
       reference_consultancy,
       pan_no,
+      adhar_no,
       bank,
       account_no,
       ifsc_code,
@@ -206,10 +208,10 @@ export const fillJoiningForm = async (req, res) => {
         present_address_pin_code, permanent_address_name, permanent_address_relation,
         permanent_address_contact_no, permanent_address_full_address, permanent_address_state,
         permanent_address_district_city, permanent_address_pin_code, date_of_interview,
-        date_of_joining, department, designation, employee_type, mode_of_recruitment,
-        reference_consultancy, pan_no, bank, account_no, ifsc_code, branch_address, uan_no,
+        date_of_joining,company_name, department, designation, employee_type, mode_of_recruitment,
+        reference_consultancy, pan_no,adhar_no, bank, account_no, ifsc_code, branch_address, uan_no,
         e_name1, e_relation1, e_address1, e_contact_no1, e_name2, e_relation2, e_address2, e_contact_no2, date
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?)`;
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?,?,?,?,?,?,?,?,?,?,?)`;
 
     const values = [
       photo_url,
@@ -239,12 +241,14 @@ export const fillJoiningForm = async (req, res) => {
       permanent_address_pin_code || null,
       date_of_interview || null,
       date_of_joining || null,
+      company_name || null,
       department || null,
       designation || null,
       employee_type || null,
       mode_of_recruitment || null,
       reference_consultancy || null,
       pan_no || null,
+      adhar_no || null,
       bank || null,
       account_no || null,
       ifsc_code || null,
