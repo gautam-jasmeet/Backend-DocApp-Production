@@ -127,6 +127,7 @@ export const login = async (req, res) => {
     // Send response with token and user details
     return res.status(200).json({
       token, // JWT token
+      employeeID: user.employeeID, // User's employee ID
       name: user.name, // User's name
       department: user.department, // User's department
       designation: user.designation, // User's designation

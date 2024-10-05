@@ -145,6 +145,7 @@ import db from "../config/db.js";
 export const fillJoiningForm = async (req, res) => {
   try {
     const {
+      employeeID,
       full_name,
       fathers_name,
       date_of_birth,
@@ -201,7 +202,7 @@ export const fillJoiningForm = async (req, res) => {
 
     const query = `
       INSERT INTO joining_forms (
-        photo_url, full_name, fathers_name, date_of_birth, gender, marital_status, blood_group,
+        photo_url,employeeID, full_name, fathers_name, date_of_birth, gender, marital_status, blood_group,
         official_contact_no, official_mail_id, personal_contact_no, personal_mail_id,
         present_address_name, present_address_relation, present_address_contact_no,
         present_address_full_address, present_address_state, present_address_district_city,
@@ -211,10 +212,11 @@ export const fillJoiningForm = async (req, res) => {
         date_of_joining,company_name, department, designation, employee_type, mode_of_recruitment,
         reference_consultancy, pan_no,adhar_no, bank, account_no, ifsc_code, branch_address, uan_no,
         e_name1, e_relation1, e_address1, e_contact_no1, e_name2, e_relation2, e_address2, e_contact_no2, date
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?,?,?,?,?,?,?,?,?,?,?)`;
+      ) VALUES (?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?,?,?,?,?,?,?,?,?,?,?)`;
 
     const values = [
       photo_url,
+      employeeID || null,
       full_name || null,
       fathers_name || null,
       date_of_birth || null,
