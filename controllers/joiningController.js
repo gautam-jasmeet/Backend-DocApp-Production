@@ -141,7 +141,7 @@
 // };
 import db from "../config/db.js";
 
-// Submit Joining Form
+// Submit Joining Form(HR Supervisor)
 export const fillJoiningForm = async (req, res) => {
   try {
     const {
@@ -283,7 +283,7 @@ export const fillJoiningForm = async (req, res) => {
   }
 };
 
-// Get Joining Forms
+// Get Joining Forms(worker,Supervisor,Admin)
 export const getJoiningForms = async (req, res) => {
   try {
     const query = "SELECT * FROM joining_forms";
@@ -294,5 +294,45 @@ export const getJoiningForms = async (req, res) => {
     res.status(200).json(result); //200 for success
   } catch (err) {
     res.status(500).json({ error: err.message }); //500 for server error
+  }
+};
+
+//Update Joining Form( Admin, HR Supervisor)
+export const updateJoiningForm = async (req, res) => {
+  try {
+    const { id } = req.params; //Assuming form ID is passes in URL
+    const updatedFields = req.body;
+    //File handling for photo upload
+    const photo_url = req.file
+      ? `/uploads/${encodeURIComponent(req.file.originalname)}`
+      : null;
+    if (photo_url) {
+      updatedFields.photo_url = photo_url;
+    }
+
+    //check if there are fields to update
+    const field = Object.keys(updatedFields)
+      .map((field) => `${field} = ?`)
+      .join(", ");
+
+    //Initialize values array
+    const values = Object.values(updatedFields);
+
+    if (field.length === 0) {
+      return res.status(400).json({ error: "No fields provided to update" });
+    }
+
+    //Add ID for where clause
+    values.push(id);
+
+    const query = `UPDATE joining_forms SET ${field} WHERE id = ?`;
+
+    //Ensure query runs as promise
+    await db.promise().query(query, values);
+    return res
+      .status(200)
+      .json({ message: "Joining form updated successfully" });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
   }
 };

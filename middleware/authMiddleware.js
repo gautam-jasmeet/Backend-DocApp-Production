@@ -83,7 +83,7 @@ export const checkRole = (roles) => async (req, res, next) => {
   }
 };
 
-// Middleware to check if the user is in the HR department using async/await
+// // Middleware to check if the user is in the HR department using async/await
 export const checkHRDepartment = async (req, res, next) => {
   try {
     if (req.user.department === "HR") {
