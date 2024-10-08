@@ -297,7 +297,7 @@ export const getJoiningForms = async (req, res) => {
   }
 };
 
-//Update Joining Form( Admin, HR Supervisor)
+//Update Joining Form(HR Supervisor)
 export const updateJoiningForm = async (req, res) => {
   try {
     const { id } = req.params; //Assuming form ID is passes in URL
