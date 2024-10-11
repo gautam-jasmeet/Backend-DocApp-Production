@@ -57,7 +57,7 @@ export const authenticateToken = async (req, res, next) => {
     req.user = user; // Set user in the request object
     next();
   } catch (err) {
-    return res.sendStatus(403).json({ error: err.message }); // Forbidden: Invalid token
+    return res.status(403).json({ error: err.message }); // Forbidden: Invalid token
   }
 };
 

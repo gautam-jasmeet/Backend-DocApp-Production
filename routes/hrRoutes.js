@@ -9,7 +9,7 @@ import {
   deleteTrainingVideo,
   getTrainingVideos,
   uploadTrainingVideo,
-} from "../controllers/hrVideoController.js";
+} from "../controllers/hrController.js";
 
 const router = express.Router();
 

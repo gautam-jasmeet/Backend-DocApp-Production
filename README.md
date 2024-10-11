@@ -104,6 +104,6 @@ videoName VARCHAR(255) NOT NULL,
 videoVersion VARCHAR(50) NOT NULL,
 videoDescription TEXT,
 videoUrl VARCHAR(255) NOT NULL,
-departmentName ENUM('Store', 'HR', 'Production','Machine','Maintance','SOP|WI','Logistics','Quality','Calibration','FQC','IQC','IPQC','EHS') NOT NULL,
+departmentName VARCHAR(200) NOT NULL,
 createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

@@ -5,7 +5,7 @@ import colors from "colors";
 import authRoutes from "./routes/authRoutes.js";
 import documentRoutes from "./routes/documentRoutes.js";
 import joiningRoutes from "./routes/joiningRoutes.js";
-import hrVideoRoutes from "./routes/hrVideoRoutes.js";
+import hrRoutes from "./routes/hrRoutes.js";
 
 dotenv.config();
 
@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/auth", authRoutes);
 app.use("/documents", documentRoutes);
 app.use("/joining", joiningRoutes); // Use joining routes
-app.use("/hr", hrVideoRoutes);
+app.use("/hr", hrRoutes);
 app.use("/uploads", express.static("uploads"));
 
 //rest api
