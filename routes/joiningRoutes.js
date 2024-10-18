@@ -3,6 +3,7 @@ import {
   fillJoiningForm,
   getJoiningForms,
   updateJoiningForm,
+  deleteJoiningForm,
 } from "../controllers/joiningController.js";
 import {
   authenticateToken,
@@ -40,6 +41,15 @@ router.put(
   checkHRDepartment,
   upload.single("photo"), // If a new photo is uploaded
   updateJoiningForm
+);
+
+//Delete joining form(HR Supervisor)
+router.delete(
+  "/:id",
+  authenticateToken,
+  checkRole(["Supervisor"]),
+  checkHRDepartment,
+  deleteJoiningForm
 );
 
 export default router;

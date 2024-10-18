@@ -400,3 +400,31 @@ export const updateJoiningForm = async (req, res) => {
     return res.status(500).json({ error: err.message });
   }
 };
+
+// Delete Joining Form (HR Supervisor)
+
+export const deleteJoiningForm = async (req, res) => {
+  try {
+    const { id } = req.params; // Assuming form ID is passed in URL
+
+    // Check if the form exists before trying to delete it
+    const checkQuery = "SELECT * FROM joining_forms WHERE id = ?";
+    const [form] = await pool.query(checkQuery, [id]);
+
+    if (form.length === 0) {
+      return res.status(404).json({ message: "Joining form not found" }); // 404 for not found
+    }
+
+    // Proceed with deleting the form
+
+    const deleteQuery = "DELETE FROM joining_forms WHERE id = ?";
+    await pool.query(deleteQuery, [id]);
+
+    return res
+      .status(200)
+      .json({ message: "Joining form deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting joining form:", err.message);
+    return res.status(500).json({ error: err.message }); // 500 for server error
+  }
+};
