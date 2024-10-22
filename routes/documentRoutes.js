@@ -23,11 +23,11 @@ router.post(
 // Get All Documents (Admin)
 router.get("/", authenticateToken, checkRole(["Admin"]), getAllDocuments);
 
-// Get Documents by Department (Supervisor, Worker)
+// Get Documents by Department (Admin,Supervisor, Worker)
 router.get(
   "/department",
   authenticateToken,
-  checkRole(["Supervisor", "Worker"]),
+  checkRole(["Admin", "Supervisor", "Worker"]),
   getDocumentsByDepartment
 );
 
