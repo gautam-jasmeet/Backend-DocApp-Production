@@ -39,4 +39,30 @@ router.delete(
   deleteTrainingVideo
 );
 
+// Route to create a question paper(HR Supervisor only)
+router.post(
+  "/question-paper",
+  authenticateToken,
+  checkRole(["Supervisor"]),
+  checkHRDepartment,
+  createQuestionPaper
+);
+
+// Route to get all question papers(Admin, Supervisor, Worker)
+router.get(
+  "/question-papers",
+  authenticateToken,
+  checkRole(["Admin", "Supervisor", "Worker"]),
+  getAllQuestionPapers
+);
+
+// Route to delete a question paper by ID(HR Supervisor)
+router.delete(
+  "/question-paper/:id",
+  authenticateToken,
+  checkRole(["Supervisor"]),
+  checkHRDepartment,
+  deleteQuestionPaper
+);
+
 export default router;
