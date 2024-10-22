@@ -6,7 +6,10 @@ import {
 } from "../middleware/authMiddleware.js";
 import upload from "../middleware/uploadMiddleware.js";
 import {
+  createQuestionPaper,
+  deleteQuestionPaper,
   deleteTrainingVideo,
+  getAllQuestionPapers,
   getTrainingVideos,
   uploadTrainingVideo,
 } from "../controllers/hrController.js";
