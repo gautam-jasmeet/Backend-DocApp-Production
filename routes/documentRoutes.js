@@ -25,7 +25,7 @@ router.get("/", authenticateToken, checkRole(["Admin"]), getAllDocuments);
 
 // Get Documents by Department (Admin,Supervisor, Worker)
 router.get(
-  "/department",
+  "/:department",
   authenticateToken,
   checkRole(["Admin", "Supervisor", "Worker"]),
   getDocumentsByDepartment
