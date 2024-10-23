@@ -185,9 +185,62 @@ export const deleteTrainingVideo = async (req, res) => {
   }
 };
 
+// // Create Question Paper
+// export const createQuestionPaper = async (req, res) => {
+//   const {
+//     questionNo,
+//     question,
+//     option1,
+//     option2,
+//     option3,
+//     option4,
+//     correctOption,
+//     paperNo,
+//   } = req.body;
+
+//   // Check if all required fields are provided
+//   if (
+//     !questionNo ||
+//     !question ||
+//     !option1 ||
+//     !option2 ||
+//     !option3 ||
+//     !option4 ||
+//     !correctOption ||
+//     !paperNo
+//   ) {
+//     return res.status(422).json({ error: "All fields are required" }); // Unprocessable Entity
+//   }
+
+//   try {
+//     // Insert question paper details into the 'question_papers' table
+//     await pool.query(
+//       `
+//       INSERT INTO question_papers (questionNo, question, option1, option2, option3, option4, correctOption, paperNo)
+//       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+//       `,
+//       [
+//         questionNo,
+//         question,
+//         option1,
+//         option2,
+//         option3,
+//         option4,
+//         correctOption,
+//         paperNo,
+//       ]
+//     );
+
+//     res.status(201).json({ message: "Question paper created successfully" }); // Created
+//   } catch (err) {
+//     return res.status(500).json({ error: err.message }); // Internal Server Error
+//   }
+// };
+
 // Create Question Paper
 export const createQuestionPaper = async (req, res) => {
   const {
+    paperId,
     questionNo,
     question,
     option1,
@@ -195,11 +248,12 @@ export const createQuestionPaper = async (req, res) => {
     option3,
     option4,
     correctOption,
-    paperNo,
+    department, // Expect department to be sent in request body
   } = req.body;
 
   // Check if all required fields are provided
   if (
+    !paperId ||
     !questionNo ||
     !question ||
     !option1 ||
@@ -207,19 +261,30 @@ export const createQuestionPaper = async (req, res) => {
     !option3 ||
     !option4 ||
     !correctOption ||
-    !paperNo
+    !department
   ) {
     return res.status(422).json({ error: "All fields are required" }); // Unprocessable Entity
   }
 
   try {
+    // Ensure the specified department exists by checking the 'users' table
+    const [departmentCheck] = await pool.query(
+      "SELECT department FROM users WHERE department = ?",
+      [department]
+    );
+
+    if (departmentCheck.length === 0) {
+      return res.status(404).json({ error: "Invalid department specified" }); // Not Found
+    }
+
     // Insert question paper details into the 'question_papers' table
     await pool.query(
       `
-      INSERT INTO question_papers (questionNo, question, option1, option2, option3, option4, correctOption, paperNo)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO question_papers (paperId, questionNo, question, option1, option2, option3, option4, correctOption, department)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
       [
+        paperId,
         questionNo,
         question,
         option1,
@@ -227,7 +292,7 @@ export const createQuestionPaper = async (req, res) => {
         option3,
         option4,
         correctOption,
-        paperNo,
+        department,
       ]
     );
 
