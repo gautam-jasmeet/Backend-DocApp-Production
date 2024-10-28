@@ -1,3 +1,75 @@
+// import express from "express";
+// import {
+//   authenticateToken,
+//   checkHRDepartment,
+//   checkRole,
+// } from "../middleware/authMiddleware.js";
+// import upload from "../middleware/uploadMiddleware.js";
+// import {
+//   createQuestionPaper,
+//   deleteQuestionPaper,
+//   deleteTrainingVideo,
+//   getAllQuestionPapers,
+//   getTrainingVideos,
+//   uploadTrainingVideo,
+// } from "../controllers/hrController.js";
+
+// const router = express.Router();
+
+// //Route for HR Supervisor to upload training video(HR Supervisor only)
+// router.post(
+//   "/training-video",
+//   authenticateToken,
+//   checkRole(["Supervisor"]),
+//   checkHRDepartment,
+//   upload.single("video"),
+//   uploadTrainingVideo
+// );
+
+// //Route to get training video("Admin","Supervisor","Worker")
+// router.get(
+//   "/",
+//   authenticateToken,
+//   checkRole(["Admin", "Supervisor", "Worker"]),
+//   getTrainingVideos
+// );
+
+// //Delete route to a remove a training video(Supervisor,Admin)
+// router.delete(
+//   "/training-video/:id",
+//   authenticateToken,
+//   checkRole(["Supervisor", "Admin"]),
+//   deleteTrainingVideo
+// );
+
+// // Route to create a question paper(HR Supervisor only)
+// router.post(
+//   "/question-paper",
+//   authenticateToken,
+//   checkRole(["Supervisor"]),
+//   checkHRDepartment,
+//   createQuestionPaper
+// );
+
+// // Route to get all question papers(Admin, Supervisor, Worker)
+// router.get(
+//   "/question-papers",
+//   authenticateToken,
+//   checkRole(["Admin", "Supervisor", "Worker"]),
+//   getAllQuestionPapers
+// );
+
+// // Route to delete a question paper by ID(HR Supervisor)
+// router.delete(
+//   "/question-paper/:id",
+//   authenticateToken,
+//   checkRole(["Supervisor"]),
+//   checkHRDepartment,
+//   deleteQuestionPaper
+// );
+
+// export default router;
+
 import express from "express";
 import {
   authenticateToken,
@@ -6,11 +78,16 @@ import {
 } from "../middleware/authMiddleware.js";
 import upload from "../middleware/uploadMiddleware.js";
 import {
+  assignPaperToEmployee,
   createQuestionPaper,
   deleteQuestionPaper,
   deleteTrainingVideo,
+  getAllAssignedPapers,
   getAllQuestionPapers,
+  getAssignedPapersByPunchId,
+  getQuestionPaper,
   getTrainingVideos,
+  updateTaskStatus,
   uploadTrainingVideo,
 } from "../controllers/hrController.js";
 
@@ -42,30 +119,82 @@ router.delete(
   deleteTrainingVideo
 );
 
-// Route to create a question paper(HR Supervisor only)
+// Route to create a question paper with file uploads
+// Define the route for creating a question paper
 router.post(
-  "/question-paper",
+  "/create-question-paper",
+  upload.fields([
+    { name: "questionImg", maxCount: 1 },
+    { name: "option1Img", maxCount: 1 },
+    { name: "option2Img", maxCount: 1 },
+    { name: "option3Img", maxCount: 1 },
+    { name: "option4Img", maxCount: 1 },
+  ]),
+  createQuestionPaper,
   authenticateToken,
   checkRole(["Supervisor"]),
-  checkHRDepartment,
-  createQuestionPaper
+  checkHRDepartment
 );
 
-// Route to get all question papers(Admin, Supervisor, Worker)
+// Get all question papers
 router.get(
-  "/question-papers",
+  "/get-question-paper",
+  getAllQuestionPapers,
   authenticateToken,
-  checkRole(["Admin", "Supervisor", "Worker"]),
-  getAllQuestionPapers
+  checkRole(["Supervisor", "Admin", "Worker"])
 );
 
-// Route to delete a question paper by ID(HR Supervisor)
+// Get question paper by paperId
+router.get(
+  "/get-question-paper/:paperId",
+  getQuestionPaper,
+  authenticateToken,
+  checkRole(["Supervisor", "Admin", "Worker"])
+);
+
+// Delete question paper by paperId
 router.delete(
-  "/question-paper/:id",
+  "/delete-question-paper/:paperId",
+  deleteQuestionPaper,
   authenticateToken,
   checkRole(["Supervisor"]),
-  checkHRDepartment,
-  deleteQuestionPaper
+  checkHRDepartment
+);
+
+// Add route for assigning paper
+router.post(
+  "/assign-paper",
+  assignPaperToEmployee,
+  authenticateToken,
+  checkRole(["Supervisor"]),
+  checkHRDepartment
+);
+
+// Get assigned papers by punchId
+router.get(
+  "/assigned-paper/:punchId",
+  getAssignedPapersByPunchId,
+  authenticateToken,
+  checkRole(["Supervisor"]),
+  checkHRDepartment
+);
+
+// Get assigned papers
+router.get(
+  "/assigned-paper",
+  getAllAssignedPapers,
+  authenticateToken,
+  checkRole(["Supervisor"]),
+  checkHRDepartment
+);
+
+// Update task status
+router.put(
+  "/update-task-status/:id",
+  updateTaskStatus,
+  authenticateToken,
+  checkRole(["Supervisor"]),
+  checkHRDepartment
 );
 
 export default router;
