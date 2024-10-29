@@ -537,7 +537,7 @@ export const createQuestionPaper = async (req, res) => {
 // Get All Question Papers
 export const getAllQuestionPapers = async (req, res) => {
   try {
-    // Query to select all question papers
+    // Query to select all question papers, including the department
     const [result] = await pool.query("SELECT * FROM question_papers");
 
     // Check if there are any question papers
@@ -545,14 +545,15 @@ export const getAllQuestionPapers = async (req, res) => {
       return res.status(404).json({ error: "No question papers found" });
     }
 
-    // Group questions by paperId
+    // Group questions by paperId and include department
     const groupedQuestions = result.reduce((acc, question) => {
-      const { paperId, ...questionData } = question;
+      const { paperId, department, ...questionData } = question;
 
       // Create a new entry if it doesn't exist
       if (!acc[paperId]) {
         acc[paperId] = {
           PaperId: paperId,
+          Department: department, // Add department here
           Questions: [],
         };
       }
@@ -625,7 +626,7 @@ export const deleteQuestionPaper = async (req, res) => {
 
 // Assign Paper to Employee
 export const assignPaperToEmployee = async (req, res) => {
-  const { employeeId, paperId, taskStatus = "inactive" } = req.body; // Default taskStatus is 'inactive'
+  const { employeeId, paperId } = req.body; // Remove taskStatus
 
   // Validate required fields
   if (!employeeId || !paperId) {
@@ -655,75 +656,51 @@ export const assignPaperToEmployee = async (req, res) => {
       return res.status(404).json({ error: "Question paper not found" });
     }
 
-    // Insert the assignment into the 'assigned_papers' table
+    // Insert the assignment into the 'assigned_papers' table without taskStatus
     await pool.query(
       `
-      INSERT INTO assigned_papers (employeeId, paperId, taskStatus)
-      VALUES (?, ?, ?)
+      INSERT INTO assigned_papers (employeeId, paperId)
+      VALUES (?, ?)
       `,
-      [employeeId, paperId, taskStatus]
+      [employeeId, paperId]
     );
 
     res.status(201).json({
       message: "Paper assigned to employee successfully",
-      data: {
-        employeeId,
-        paperId,
-        taskStatus,
-      },
-    }); // Created
+    });
   } catch (err) {
     return res.status(500).json({ error: err.message }); // Internal Server Error
   }
 };
 
-// Get all assigned papers
-export const getAllAssignedPapers = async (req, res) => {
-  try {
-    const [assignedPapers] = await pool.query(`
-     SELECT * FROM assigned_papers
-    `);
-
-    res.status(200).json({
-      message: "Assigned papers retrieved successfully",
-      data: assignedPapers,
-    }); // OK
-  } catch (err) {
-    return res.status(500).json({ error: err.message }); // Internal Server Error
-  }
-};
-
-// Get Assigned Papers for Employee using punchId
-export const getAssignedPapersByPunchId = async (req, res) => {
-  const { punchId } = req.params; // Get punchId from request parameters
+// Get Assigned Papers by Employee ID
+export const getAssignedPapersByEmployeeId = async (req, res) => {
+  const { employeeId } = req.params;
 
   // Validate required fields
-  if (!punchId) {
+  if (!employeeId) {
     return res.status(422).json({
-      error: "Punch ID is required",
+      error: "Employee ID is required",
     });
   }
 
   try {
-    // Retrieve employeeId using punchId
+    // Check if the employee exists
     const [employeeCheck] = await pool.query(
-      "SELECT employeeId FROM users WHERE punchId = ?",
-      [punchId]
+      "SELECT * FROM users WHERE employeeId = ?",
+      [employeeId]
     );
 
     if (employeeCheck.length === 0) {
       return res.status(404).json({ error: "Employee not found" });
     }
 
-    const employeeId = employeeCheck[0].employeeId; // Get employeeId from the response
-
-    // Get assigned papers for the employee
+    // Retrieve assigned papers for the employee without using JOIN
     const [assignedPapers] = await pool.query(
       `
-      SELECT ap.*, qp.paperTitle 
-      FROM assigned_papers ap 
-      JOIN question_papers qp ON ap.paperId = qp.paperId 
-      WHERE ap.employeeId = ?
+      SELECT * 
+      FROM assigned_papers 
+      WHERE employeeId = ?
       `,
       [employeeId]
     );
@@ -740,33 +717,5 @@ export const getAssignedPapersByPunchId = async (req, res) => {
     });
   } catch (err) {
     return res.status(500).json({ error: err.message });
-  }
-};
-
-// Update Task Status for Assigned Paper
-export const updateTaskStatus = async (req, res) => {
-  const { id } = req.params; // Assume you pass the assignment ID as a URL parameter
-  const { taskStatus } = req.body;
-
-  try {
-    // Check if the assignment exists
-    const [assignmentCheck] = await pool.query(
-      "SELECT * FROM assigned_papers WHERE id = ?",
-      [id]
-    );
-
-    if (assignmentCheck.length === 0) {
-      return res.status(404).json({ error: "Assignment not found" });
-    }
-
-    // Update the task status
-    await pool.query("UPDATE assigned_papers SET taskStatus = ? WHERE id = ?", [
-      taskStatus,
-      id,
-    ]);
-
-    res.status(200).json({ message: "Task status updated successfully" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
   }
 };
