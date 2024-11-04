@@ -158,7 +158,6 @@ router.delete(
   checkRole(["Supervisor"]),
   checkHRDepartment
 );
-
 // Add route for assigning paper
 router.post(
   "/assign-paper",
@@ -168,7 +167,7 @@ router.post(
   checkHRDepartment
 );
 
-// Get assigned papers by employeeId
+// Get assigned papers by Employee ID
 router.get(
   "/assign-paper/:employeeId",
   getAssignedPapersByEmployeeId,
