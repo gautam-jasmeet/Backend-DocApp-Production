@@ -86,6 +86,7 @@ import {
   getAssignedPapersByEmployeeId,
   getQuestionPaper,
   getTrainingVideos,
+  postScore,
   uploadTrainingVideo,
 } from "../controllers/hrController.js";
 
@@ -175,5 +176,8 @@ router.get(
   checkRole(["Supervisor"]),
   checkHRDepartment
 );
+
+// Define the POST route for scoring
+router.post("/score", postScore, authenticateToken, checkRole(["Worker"]));
 
 export default router;

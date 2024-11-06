@@ -775,3 +775,63 @@ export const getAssignedPapersByEmployeeId = async (req, res) => {
     return res.status(500).json({ error: err.message });
   }
 };
+
+
+// Post Score
+export const postScore = async (req, res) => {
+  const { employeeId, paperId, correctQuestions, incorrectQuestions } =
+    req.body;
+
+  // Validate required fields
+  if (
+    !employeeId ||
+    !paperId ||
+    correctQuestions === undefined ||
+    incorrectQuestions === undefined
+  ) {
+    return res.status(422).json({
+      error:
+        "Employee ID, Paper ID, Correct Questions, and Incorrect Questions are required",
+    });
+  }
+
+  try {
+    // Check if the employee exists
+    const [employeeCheck] = await pool.query(
+      "SELECT * FROM users WHERE employeeId = ?",
+      [employeeId]
+    );
+
+    if (employeeCheck.length === 0) {
+      return res.status(404).json({ error: "Employee not found" });
+    }
+
+    // Check if the paper exists
+    const [paperCheck] = await pool.query(
+      "SELECT * FROM question_papers WHERE paperId = ?",
+      [paperId]
+    );
+
+    if (paperCheck.length === 0) {
+      return res.status(404).json({ error: "Question paper not found" });
+    }
+
+    // Insert the correct and incorrect questions into the 'employee_scores' table
+    await pool.query(
+      `
+      INSERT INTO employee_scores (employeeId, paperId, correctQuestions, incorrectQuestions)
+      VALUES (?, ?, ?, ?)
+      `,
+      [employeeId, paperId, correctQuestions, incorrectQuestions]
+    );
+
+    // Prepare the response
+    const response = {
+      message: "Score recorded successfully",
+    };
+
+    res.status(201).json(response); // Created
+  } catch (err) {
+    return res.status(500).json({ error: err.message }); // Internal Server Error
+  }
+};
